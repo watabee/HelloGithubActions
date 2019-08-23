@@ -9,4 +9,4 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - run: ls -ll
+      - run: ./gradlew testDebugUnitTest
