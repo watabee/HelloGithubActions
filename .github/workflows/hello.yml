@@ -1,13 +1,19 @@
-name: Hello, World!
+name: Run Test
 on: push
 
 jobs:
-  build:
-    name: Run Unit Test
+  checkout:
+    name: Checkout project
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout project
+        uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - run: mkdir -p /home/runner/.android && touch /home/runner/.android/repositories.cfg
-      - run: ./gradlew testDebugUnitTest
+  build:
+    name: Run Test
+    needs: checkout
+    runs-on: ubuntu-latest
+      - name: Run unit test
+        run: mkdir -p /home/runner/.android && touch /home/runner/.android/repositories.cfg
+        run: ./gradlew testDebugUnitTest
