@@ -8,6 +8,6 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-    steps:
       - run: mkdir -p /home/runner/.android && touch /home/runner/.android/repositories.cfg
       - run: ./gradlew testDebugUnitTest
+      - run: avdmanager create avd -n test -k "system-images;android-28;google_apis;x86"
