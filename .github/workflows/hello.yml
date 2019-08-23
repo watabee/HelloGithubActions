@@ -2,17 +2,12 @@ name: Run Test
 on: push
 
 jobs:
-  checkout:
-    name: Checkout project
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-  build:
-    name: Run Test
-    needs: checkout
-    runs-on: ubuntu-latest
     steps:
       - run: mkdir -p /home/runner/.android && touch /home/runner/.android/repositories.cfg
       - run: ./gradlew testDebugUnitTest
