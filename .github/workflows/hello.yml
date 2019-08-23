@@ -3,7 +3,7 @@ on: push
 
 jobs:
   build:
-    name: Greeting
+    name: Run Unit Test
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello, World!"
+      - run: ./gradlew testDebugUnitTest
