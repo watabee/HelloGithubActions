@@ -6,4 +6,4 @@ jobs:
     name: Run Unit Test
     runs-on: ubuntu-latest
     steps:
-      - run: ./gradlew testDebugUnitTest
+      - run: ls -ll
