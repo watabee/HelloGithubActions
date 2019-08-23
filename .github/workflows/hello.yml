@@ -6,4 +6,7 @@ jobs:
     name: Run Unit Test
     runs-on: ubuntu-latest
     steps:
-      - run: touch hoge.txt && ls -ll
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - run: ls -ll
