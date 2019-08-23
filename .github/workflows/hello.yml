@@ -14,6 +14,7 @@ jobs:
     name: Run Test
     needs: checkout
     runs-on: ubuntu-latest
+    steps:
       - name: Run unit test
-      - run: mkdir -p /home/runner/.android && touch /home/runner/.android/repositories.cfg
-      - run: ./gradlew testDebugUnitTest
+        run: mkdir -p /home/runner/.android && touch /home/runner/.android/repositories.cfg
+        run: ./gradlew testDebugUnitTest
