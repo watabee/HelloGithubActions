@@ -9,4 +9,4 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - run: touch /home/runner/.android/repositories.cfg && ./gradlew testDebugUnitTest
+      - run: mkdir -p /home/runner/.android && touch /home/runner/.android/repositories.cfg && ./gradlew testDebugUnitTest
