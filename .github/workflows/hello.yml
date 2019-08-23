@@ -10,5 +10,4 @@ jobs:
         with:
           fetch-depth: 1
       - run: mkdir -p /home/runner/.android && touch /home/runner/.android/repositories.cfg
-      - run: chmod 755 /usr/local/lib/android/sdk
       - run: ./gradlew testDebugUnitTest
