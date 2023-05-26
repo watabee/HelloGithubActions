@@ -23,3 +23,8 @@ jobs:
         run: echo "Start deploy to ${{ inputs.qa_env }}"
       - name: echo branch
         run: echo "branch name ${{ inputs.ref_name }}"
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      - name: echo branch2
+        run: echo "branch name ${branch}"
