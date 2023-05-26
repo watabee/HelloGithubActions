@@ -1,0 +1,25 @@
+name: Manual Trigger
+on:
+  workflow_dispatch:
+    inputs:
+      qa_env:
+        description: '接続するAPIのqa環境を指定する'
+        required: true
+        type: choice
+        options:
+          - qa1
+          - qa2
+          - qa3
+          - qa4
+          - qa5
+          - qa6
+          - qa7
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo qa_env
+        run: echo "Start deploy to ${{ inputs.qa_env }}"
+      - name: echo branch
+        run: echo "branch name ${{ inputs.ref_name }}"
