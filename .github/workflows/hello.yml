@@ -22,6 +22,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Compare version
+        run: |
+          ANDROID_APP_VERSION=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' app/build.gradle)
+          IOS_APP_VERSION=$(sed -n 's/.*app_version "\(.*\)".*/\1/p' ios/fastlane/Deliverfile)
+          APP_VERSION = ruby -e "v1 = Gem::Version.new('$ANDROID_APP_VERSION'); v2 = Gem::Version.new('$IOS_APP_VERSION'); puts v1 > v2 ? v1 : v2"
+          echo "APP_VERSION=$APP_VERSION"
       - name: Hoge
         run: |
           sed -i -e 's/\(.*app_version \)"\(.*\)"/\1"9.0.0"/' ios/fastlane/Deliverfile
