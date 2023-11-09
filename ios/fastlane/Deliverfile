@@ -1,0 +1,69 @@
+# The Deliverfile allows you to store various App Store Connect metadata
+# For more information, check out the docs
+# https://docs.fastlane.tools/actions/deliver/
+
+app_identifier "com.aldagram.kanna"
+username "sohichironagao@aldagram.com"
+
+
+#ipa ""
+#pkg ""
+
+app_version "8.5.2"
+
+#skip_app_version_update true
+
+submit_for_review true
+force true
+
+automatic_release false
+#phased_release false
+#reset_ratings false
+
+#app_rating_config_path ""
+
+skip_metadata false
+skip_screenshots true
+skip_binary_upload true
+
+overwrite_screenshots false
+
+#price_tier 0
+
+#trade_representative_contact_information(
+#  first_name: "Felix",
+#  last_name: "Krause",
+#  address_line1: "1 Infinite Loop",
+#  address_line2: "",
+#  address_line3: null,
+#  city_name: "Cupertino",
+#  state: "California",
+#  country: "United States",
+#  postal_code: "95014",
+#  phone_number: "+43 123123123",
+#  email_address: "github@krausefx.com",
+#)
+
+#app_review_information(
+#  first_name: "Felix",
+#  last_name: "Krause",
+#  phone_number: "+43 123123123",
+#  email_address: "github@krausefx.com",
+#  demo_user: "demoUser",
+#  demo_password: "demoPass",
+#  notes: "such notes, very text"
+#)
+#app_review_attachment_file ""
+
+submission_information({
+  add_id_info_uses_idfa: false,
+  add_id_info_serves_ads: false,
+  add_id_info_tracks_action: false,
+  add_id_info_tracks_install: false,
+  export_compliance_app_type: nil,
+  export_compliance_uses_encryption: false,
+  export_compliance_encryption_updated: false,
+  export_compliance_is_exempt: true,
+  export_compliance_contains_third_party_cryptography: false,
+  export_compliance_contains_proprietary_cryptography: false
+})
