@@ -25,7 +25,7 @@ jobs:
       - id: compare-versions
         name: Compare versions
         run: |
-          android_app_version=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' android/app/build.gradle)
+          android_app_version=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' app/build.gradle)
           ios_app_version=$(sed -n 's/.*app_version "\(.*\)".*/\1/p' ios/fastlane/Deliverfile)
           app_version=$(ruby -e "v1 = Gem::Version.new('$android_app_version'); v2 = Gem::Version.new('$ios_app_version'); puts v1 > v2 ? v1 : v2")
           echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
