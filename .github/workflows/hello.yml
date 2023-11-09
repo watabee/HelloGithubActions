@@ -22,14 +22,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Compare version
+      - id: compare-versions
+        name: Compare versions
         run: |
-          ANDROID_APP_VERSION=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' app/build.gradle)
-          IOS_APP_VERSION=$(sed -n 's/.*app_version "\(.*\)".*/\1/p' ios/fastlane/Deliverfile)
-          APP_VERSION=$(ruby -e "v1 = Gem::Version.new('$ANDROID_APP_VERSION'); v2 = Gem::Version.new('$IOS_APP_VERSION'); puts v1 > v2 ? v1 : v2")
-          echo "APP_VERSION=$APP_VERSION"
+          android_app_version=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' android/app/build.gradle)
+          ios_app_version=$(sed -n 's/.*app_version "\(.*\)".*/\1/p' ios/fastlane/Deliverfile)
+          app_version=$(ruby -e "v1 = Gem::Version.new('$android_app_version'); v2 = Gem::Version.new('$ios_app_version'); puts v1 > v2 ? v1 : v2")
+          echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
       - name: Hoge
         run: |
+          echo "app_version: ${{ steps.compare-versions.outputs.app_version }}"
           sed -i -e 's/\(.*app_version \)"\(.*\)"/\1"9.0.0"/' ios/fastlane/Deliverfile
           cat ios/fastlane/Deliverfile
           
