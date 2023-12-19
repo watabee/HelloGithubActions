@@ -1,0 +1,3 @@
+Release:
+  - base-branch: 'master'
+  - head-branch: 'develop'
