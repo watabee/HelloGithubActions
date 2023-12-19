@@ -1,3 +1,5 @@
 Release:
+  - changed-files:
+      - any-glob-to-any-file: '**'
   - base-branch: 'master'
   - head-branch: 'develop'
