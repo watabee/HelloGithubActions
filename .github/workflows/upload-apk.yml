@@ -17,14 +17,47 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            console.log(`start`);
-            let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
+            const workflows = await github.rest.actions.listRepoWorkflows({
                owner: context.repo.owner,
                repo: context.repo.repo,
-               run_id: context.payload.workflow_run.id,
             });
-            console.log(`success allArtifacts`);
-            let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
+            
+            const workflowFileName = 'build.yml';
+            let workflowId = null;
+            for (const workflow of workflows.data.workflows) {
+              if (workflow.path.endsWith(workflowFileName)) {
+                workflowId = workflow.id;
+                break;
+              }
+            }            
+            
+            if (!workflowId) {
+              throw new Error(`Workflow ${workflowFileName} not found`);
+            }
+            console.log(`Workflow ID: ${workflowId}`);
+            
+            const workflowRuns = await github.rest.actions.listWorkflowRuns({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               workflow_id: workflowId,
+               status: 'completed',
+               per_page: 1
+            });
+            
+            if (workflowRuns.data.workflow_runs.length === 0) {
+              throw new Error(`No completed workflow runs found for workflow ID ${workflowId}`);
+            }
+
+            const runId = workflowRuns.data.workflow_runs[0].id;
+            console.log(`Run ID: ${runId}`);
+            
+            const allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: runId
+            });
+            
+            const matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
               return artifact.name === "${{ inputs.app-version }}.apk"
             })[0];
             console.log(`matchArtifact = JSON.stringify(matchArtifact)`);
