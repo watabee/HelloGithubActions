@@ -1,0 +1,31 @@
+name: Upload APK to App Distribution
+
+on:
+  workflow_dispatch:
+    inputs:
+      app-version:
+        description: 'アプリのバージョン'
+        required: true
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.app-version }}.apk
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Upload to App Distribution
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
+          FIREBASE_PROJECT_ID: hellogithubactions-b0f74
+        run: |
+          npx firebase appdistribution:distribute ${{ inputs.app-version }}.apk \
+            --app 1:930094710384:android:009c054bfb510e226b3eb5
