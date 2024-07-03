@@ -17,20 +17,24 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            console.log(`start`);
             let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
                owner: context.repo.owner,
                repo: context.repo.repo,
                run_id: context.payload.workflow_run.id,
             });
+            console.log(`success allArtifacts`);
             let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "${{ inputs.app-version }}.apk"
+              return artifact.name === "${{ inputs.app-version }}.apk"
             })[0];
+            console.log(`matchArtifact = JSON.stringify(matchArtifact)`);
             let download = await github.rest.actions.downloadArtifact({
                owner: context.repo.owner,
                repo: context.repo.repo,
                artifact_id: matchArtifact.id,
                archive_format: 'zip',
             });
+            console.log(`success download`);
             let fs = require('fs');
             fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/apk.zip`, Buffer.from(download.data));
 
