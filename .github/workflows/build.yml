@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-disabled: true
+
+      - name: Build Android App
+        run: |
+          ./gradlew assembleDebug
+          
+      - id: retrieve-app-version
+        run: |
+          android_app_version=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' app/build.gradle)
+          echo "android_app_version=$android_app_version" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.retrieve-app-version.outputs.android_app_version }}.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+          overwrite: true
