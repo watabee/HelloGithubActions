@@ -14,18 +14,33 @@ jobs:
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/github-script@v7
         with:
-          name: ${{ inputs.app-version }}.apk
+          script: |
+            let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: context.payload.workflow_run.id,
+            });
+            let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "${{ inputs.app-version }}.apk"
+            })[0];
+            let download = await github.rest.actions.downloadArtifact({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip',
+            });
+            let fs = require('fs');
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/apk.zip`, Buffer.from(download.data));
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
+      - name: Unzip artifact
+        run: unzip apk.zip
 
       - name: Upload to App Distribution
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
           FIREBASE_PROJECT_ID: hellogithubactions-b0f74
         run: |
-          npx firebase appdistribution:distribute ${{ inputs.app-version }}.apk \
+          npx firebase appdistribution:distribute apk.apk \
             --app 1:930094710384:android:009c054bfb510e226b3eb5
