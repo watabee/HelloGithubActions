@@ -87,3 +87,11 @@ jobs:
         run: |
           npx firebase appdistribution:distribute kanna.apk \
             --app 1:930094710384:android:009c054bfb510e226b3eb5
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: npm_logs
+          path: |
+            /home/runner/.npm/_logs
+          retention-days: 1
