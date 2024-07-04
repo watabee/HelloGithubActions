@@ -97,7 +97,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
           FIREBASE_PROJECT_ID: hellogithubactions-b0f74
         run: |
-          firebase appdistribution:distribute kanna.apk \ 
+          firebase appdistribution:distribute kanna.apk \
             --app 1:930094710384:android:009c054bfb510e226b3eb5
 
       - uses: actions/upload-artifact@v4
