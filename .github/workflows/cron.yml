@@ -1,8 +1,6 @@
 name: Cron
 
 on:
-  schedule:
-    - cron: "0,10,20,30,40,50 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -15,4 +13,12 @@ jobs:
 
       - name: Hello
         run: |
-          echo "Hello, GitHub Actions"
+          echo $(date) > hogehoge.txt
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Update hogehoge.txt
+          branch: ci/update_text
+          branch-suffix: timestamp
